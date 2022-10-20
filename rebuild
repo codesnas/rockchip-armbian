@@ -53,7 +53,7 @@ arch_info="$(arch)"
 host_release="$(cat /etc/os-release | grep VERSION_CODENAME | cut -d"=" -f2)"
 # Get armbian ${VERSION_CODENAME}: such as [ jammy ]
 os_release_file="etc/os-release"
-# Set banner's ${BOARD_NAME}: such as [ s905x3 ]
+# Set banner's ${BOARD_NAME}: such as [ rock5b ]
 armbian_release_file="etc/armbian-release"
 # Add custom armbian firmware information
 ophub_release_file="etc/ophub-release"
@@ -454,14 +454,6 @@ refactor_files() {
 
     # Processing partition files: bootfs
     cd ${tag_bootfs}
-
-    # Add u-boot.ext for 5.10 kernel
-    if [[ "${K510}" -eq "1" && -n "${UBOOT_OVERLOAD}" && -f "${UBOOT_OVERLOAD}" ]]; then
-        cp -f ${UBOOT_OVERLOAD} u-boot.ext
-        chmod +x u-boot.ext
-    elif [[ "${K510}" -eq "1" ]] && [[ -z "${UBOOT_OVERLOAD}" || ! -f "${UBOOT_OVERLOAD}" ]]; then
-        error_msg "${soc} SoC does not support using ${kernel} kernel, missing u-boot."
-    fi
 
     # Edit the armbianEnv.txt
     boot_conf_file="armbianEnv.txt"

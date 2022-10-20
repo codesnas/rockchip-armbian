@@ -110,7 +110,6 @@ jobs:
         uses: ophub/rockchip-armbian@main
         if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
         with:
-          build_target: armbian
           armbian_path: build/output/images/*.img.gz
           armbian_soc: ${{ github.event.inputs.armbian_soc }}
           armbian_kernel: ${{ github.event.inputs.armbian_kernel }}
