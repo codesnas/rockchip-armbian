@@ -427,9 +427,8 @@ refactor_files() {
     [[ "$(ls ${tag_bootfs}/*-${kernel}-* -l 2>/dev/null | grep "^-" | wc -l)" -ge "4" ]] || error_msg "The /boot files is missing."
 
     # 02. For /boot/dtb/rockchip/*
-    mkdir -p ${tag_bootfs}/dtb/rockchip
-    tar -xzf ${kernel_dtb} -C ${tag_bootfs}/dtb/rockchip
-    (cd ${tag_bootfs} && ln -sf dtb dtb-${kernel_name})
+    mkdir -p ${tag_bootfs}/dtb-${kernel_name}/rockchip && ln -sf dtb-${kernel_name} ${tag_bootfs}/dtb
+    tar -xzf ${kernel_dtb} -C ${tag_bootfs}/dtb-${kernel_name}/rockchip
     [[ "$(ls ${tag_bootfs}/dtb/rockchip -l 2>/dev/null | grep "^-" | wc -l)" -ge "2" ]] || error_msg "/boot/dtb/rockchip files is missing."
 
     # 03. For /usr/src/linux-headers-${kernel_name}
