@@ -196,11 +196,15 @@ find_armbian() {
     armbian_rebuild_version="$(echo ${armbian_rebuild_name} | grep -oE '[2-9][0-9].[0-9]{1,2}.[0-9]{1,2}' | head -n 1)"
     [[ -n "${armbian_rebuild_version}" ]] || {
         armbian_rebuild_version="22.02.02"
-        echo -e "${WARNING} Missing armbian version info!"
+        echo -e "${WARNING} Missing Armbian release version info!"
     }
 
+    # Get the release kernel version
+    release_kernel="$(echo ${armbian_rebuild_name} | grep -oE '[5-9].[0-9]{1,2}.[0-9]{1,3}' | head -n 1)"
+    [[ -z "${release_kernel}" ]] && release_kernel="null" && echo -e "${WARNING} Missing Armbian kernel version info!"
+
     # Rename Img
-    new_imgname="Tmp_${armbian_rebuild_version}.img"
+    new_imgname="Tmp_${armbian_rebuild_version}-trunk_${release_kernel}.img"
     mv -f ${armbian_outputpath}/${armbian_rebuild_name} ${armbian_outputpath}/${new_imgname} 2>/dev/null
 
     echo -e "${INFO} Armbian rebuild file: [ ${armbian_rebuild_name} ], Version: [ ${armbian_rebuild_version} ]"
