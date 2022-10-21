@@ -340,8 +340,8 @@ extract_armbian() {
     loop_old="$(losetup -P -f --show "${armbian_image_file}")"
     [[ -n "${loop_old}" ]] || error_msg "losetup ${armbian_image_file} failed."
 
-    if ! mount ${loop_old}p1 ${tmp_armbian}; then
-        error_msg "mount ${loop_old}p1 failed!"
+    if ! mount ${loop_old}p2 ${tmp_armbian}; then
+        error_msg "mount ${loop_old}p2 failed!"
     fi
 
     cd ${tmp_armbian}
@@ -509,7 +509,7 @@ refactor_files() {
     ln -sf /usr/sbin/armbian-ddbr usr/sbin/ddbr
 
     # Add custom firmware information
-    echo "PLATFORM='rockchip'" >>${op_release} 2>/dev/null
+    echo "PLATFORM='rockchip'" >>${ophub_release_file} 2>/dev/null
     echo "VERSION_CODEID='${release_codeid}'" >>${ophub_release_file} 2>/dev/null
     echo "VERSION_CODENAME='${release_codename}'" >>${ophub_release_file} 2>/dev/null
     echo "FDTFILE='${FDTFILE}'" >>${ophub_release_file} 2>/dev/null
