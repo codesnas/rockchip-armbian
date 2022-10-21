@@ -199,18 +199,11 @@ find_armbian() {
         echo -e "${WARNING} Missing armbian version info!"
     }
 
-    # Get VERSION_CODENAME
-    release_codename="$(echo ${armbian_rebuild_name} | grep -oE '(jammy|focal|bullseye)')"
-    [[ -z "${release_codename}" ]] && error_msg "The [ ${armbian_rebuild_name}: VERSION_CODENAME ] is invalid."
-
-    # Get ID
-    [[ "${release_codename}" == "bullseye" ]] && release_codeid="debian" || release_codeid="ubuntu"
-
     # Rename Img
-    new_imgname="Tmp_${armbian_rebuild_version}_${release_codename}.img"
+    new_imgname="Tmp_${armbian_rebuild_version}.img"
     mv -f ${armbian_outputpath}/${armbian_rebuild_name} ${armbian_outputpath}/${new_imgname} 2>/dev/null
 
-    echo -e "${INFO} Armbian Version: [ ${armbian_rebuild_version} ], ID [ ${release_codeid} ], VERSION_CODENAME [ ${release_codename} ] "
+    echo -e "${INFO} Armbian rebuild file: [ ${armbian_rebuild_name} ], Version: [ ${armbian_rebuild_version} ]"
 }
 
 download_depends() {
@@ -345,6 +338,13 @@ extract_armbian() {
     fi
 
     cd ${tmp_armbian}
+
+    # Find ID in ${os_release_file}: such as [ubuntu/debian]
+    release_codeid="$(cat ${os_release_file} | grep -oE "^ID=.*" | cut -d"=" -f2)"
+    [[ -z "${release_codeid}" ]] && error_msg "The [ ${os_release_file}: ID ] is invalid."
+    # Find VERSION_CODENAME in ${os_release_file}: such as [jammy/focal/bullseye]
+    release_codename="$(cat ${os_release_file} | grep -oE "^VERSION_CODENAME=.*" | cut -d"=" -f2)"
+    [[ -z "${release_codename}" ]] && error_msg "The [ ${os_release_file}: VERSION_CODENAME ] is invalid."
 
     # Delete all files of /boot partition and replace it later
     rm -rf boot/* 2>/dev/null
