@@ -94,19 +94,8 @@ jobs:
           cd build/
           sudo ./compile.sh RELEASE=${{ env.ARMBIAN_RELEASE }} BOARD=rock-5b BRANCH=legacy BUILD_DESKTOP=no HOST=armbian EXPERT=yes \
                             BUILD_MINIMAL=no KERNEL_ONLY=no KERNEL_CONFIGURE=no CLEAN_LEVEL=make,debs COMPRESS_OUTPUTIMAGE="sha,gz"
-          echo -e "Armbian compiled complete." && sync
-          (cd build/output/images && mv Armbian_*.img.gz tmp.img.gz 2>/dev/null)
           echo "build_tag=Armbian_rockchip_${{ env.ARMBIAN_RELEASE }}_$(date +"%m.%d.%H%M")" >> ${GITHUB_OUTPUT}
           echo "status=success" >> ${GITHUB_OUTPUT}
-
-      - name: Upload Armbian image to Release
-        uses: ncipollo/release-action@main
-        if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
-        with:
-          tag: ${{ steps.compile.outputs.build_tag }}
-          artifacts: build/output/images/*.img.gz
-          allowUpdates: true
-          token: ${{ secrets.GH_TOKEN }}
 
       - name: Rebuild Armbian for rockchip
         uses: ophub/rockchip-armbian@main

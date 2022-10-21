@@ -191,13 +191,26 @@ find_armbian() {
     # Get armbian release and version
     armbian_rebuild_name="$(ls ${armbian_rebuild_file} 2>/dev/null | head -n 1 | awk -F "/" '{print $NF}')"
     [[ -n "${armbian_rebuild_name}" ]] || error_msg "The armbian original file does not exist: [ ${armbian_rebuild_file} ]"
+
     # Find armbian version info: such as [ 22.02.0 ]
     armbian_rebuild_version="$(echo ${armbian_rebuild_name} | grep -oE '[2-9][0-9].[0-9]{1,2}.[0-9]{1,2}' | head -n 1)"
     [[ -n "${armbian_rebuild_version}" ]] || {
         armbian_rebuild_version="22.02.02"
         echo -e "${WARNING} Missing armbian version info!"
     }
-    echo -e "${INFO} Armbian rebuild file: [ ${armbian_rebuild_name} ], Version: [ ${armbian_rebuild_version} ]"
+
+    # Get VERSION_CODENAME
+    release_codename="$(echo ${armbian_rebuild_name} | grep -oE '(jammy|focal|bullseye)')"
+    [[ -z "${release_codename}" ]] && error_msg "The [ ${armbian_rebuild_name}: VERSION_CODENAME ] is invalid."
+
+    # Get ID
+    [[ "${release_codename}" == "bullseye" ]] && release_codeid="debian" || release_codeid="ubuntu"
+
+    # Rename Img
+    new_imgname="Tmp_${armbian_rebuild_version}_${release_codename}.img"
+    mv -f ${armbian_outputpath}/${armbian_rebuild_name} ${armbian_outputpath}/${new_imgname} 2>/dev/null
+
+    echo -e "${INFO} Armbian Version: [ ${armbian_rebuild_version} ], ID [ ${release_codeid} ], VERSION_CODENAME [ ${release_codename} ] "
 }
 
 download_depends() {
@@ -322,7 +335,7 @@ extract_armbian() {
 
     armbian_image_file="${tmp_aml_image}/armbian_${soc}_${kernel}.img"
     rm -f ${armbian_image_file} 2>/dev/null
-    cp -f "${armbian_outputpath}/${armbian_rebuild_name}" "${armbian_image_file}"
+    cp -f "${armbian_outputpath}/${new_imgname}" "${armbian_image_file}"
 
     loop_old="$(losetup -P -f --show "${armbian_image_file}")"
     [[ -n "${loop_old}" ]] || error_msg "losetup ${armbian_image_file} failed."
@@ -332,13 +345,6 @@ extract_armbian() {
     fi
 
     cd ${tmp_armbian}
-
-    # Find ID in ${os_release_file}: such as [ubuntu/debian]
-    release_codeid="$(cat ${os_release_file} | grep -oE "^ID=.*" | cut -d"=" -f2)"
-    [[ -z "${release_codeid}" ]] && error_msg "The [ ${os_release_file}: ID ] is invalid."
-    # Find VERSION_CODENAME in ${os_release_file}: such as [jammy/focal/bullseye]
-    release_codename="$(cat ${os_release_file} | grep -oE "^VERSION_CODENAME=.*" | cut -d"=" -f2)"
-    [[ -z "${release_codename}" ]] && error_msg "The [ ${os_release_file}: VERSION_CODENAME ] is invalid."
 
     # Delete all files of /boot partition and replace it later
     rm -rf boot/* 2>/dev/null
