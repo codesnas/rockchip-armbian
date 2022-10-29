@@ -61,7 +61,7 @@ ophub_release_file="etc/ophub-release"
 script_repo="https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/common-files"
 # Kernel files download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
-version_branch="rock5b"
+version_branch="rk3588"
 auto_kernel="true"
 build_kernel=("5.10.100")
 # Set supported SoC
