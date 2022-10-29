@@ -27,9 +27,9 @@
 #
 # confirm_version    : Confirm version type
 # extract_armbian    : Extract Armbian files
-# refactor_files     : Refactor related files
 # make_image         : Making Armbian file
 # copy_files         : Copy the Armbian files
+# refactor_files     : Refactor related files
 # clean_tmp          : Clear temporary files
 #
 # loop_rebuild       : Loop to rebuild Armbian files
@@ -406,7 +406,7 @@ copy_files() {
     fi
 
     # Copy the full Armbian image
-    mv -f ${tmp_armbian}/* ${tag_rootfs}
+    cp -af ${tmp_armbian}/* ${tag_rootfs}
 
     sync && sleep 3
 }
@@ -579,7 +579,7 @@ clean_tmp() {
 
     cd ${tmp_outpath}
 
-    pigz -9 *.img && mv -f *.img.gz ${armbian_outputpath} && sync
+    pigz -9f *.img && mv -f *.img.gz ${armbian_outputpath} && sync
 
     cd ${make_path}
 
