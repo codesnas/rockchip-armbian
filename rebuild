@@ -68,6 +68,7 @@ auto_kernel="true"
 # Set supported SoC
 build_armbian=(
     "rock5b"
+    "r66s" "r68s"
 )
 # Set Armbian firmware size (Unit: MiB, SKIP_MB >= 4, BOOT_MB >= 256, ROOT_MB >= 2048)
 SKIP_MB="16"
