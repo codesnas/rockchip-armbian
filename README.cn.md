@@ -2,7 +2,7 @@
 
 查看英文说明 | [View English description](README.md)
 
-当前支持 `瑞莎 Rock5b`，`电犀牛 R66S/R68S` 设备，使用 [unifreq's](https://github.com/unifreq) 的加强版 bootloader 和 最新版本的内核进行了重制。添加了在 [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) 项目中开发的更多应用和服务，支持写入 `TF/USB/eMMC/NVME` 中使用。
+当前支持 `瑞莎 Rock5b`，`电犀牛 R66S/R68S` 设备，使用 [unifreq's](https://github.com/unifreq) 的加强版 bootloader 和最新版本的内核进行了重制。添加了在 [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) 项目中开发的更多应用和服务，支持写入 `TF/USB/eMMC/NVME` 中使用。
 
 最新版固件可以在 [Releases](https://github.com/ophub/rockchip-armbian/releases) 中下载。
 
@@ -32,7 +32,8 @@ dd if=armbian.img  of=/dev/<your_device_name>  bs=1M conv=fsync
 # If no parameter is specified, it will update to the latest version.
 armbian-update
 ```
-如果当前目录下有成套的内核文件，将使用当前目录的内核进行更新（更新需要的 4 个内核文件是 `header-xxx.tar.gz`, `boot-xxx.tar.gz`, `dtb-rockchip-xxx.tar.gz`, `modules-xxx.tar.gz`。其他内核文件不需要，如果同时存在也不影响更新，系统可以准确识别需要的内核文件）。如果当前目录没有内核文件，将从服务器查询并下载同系列的最新内核进行更新。你也可以查询[可选内核](https://github.com/ophub/kernel/tree/main/pub)版本，进行指定版本更新：`armbian-update 5.10.150`。在设备支持的可选内核里可以自由更新，如从 5.10.150 内核更新为 5.15.75 内核。
+
+如果当前目录下有成套的内核文件，将使用当前目录的内核进行更新（更新需要的 4 个内核文件是 `header-xxx.tar.gz`, `boot-xxx.tar.gz`, `dtb-rockchip-xxx.tar.gz`, `modules-xxx.tar.gz`。其他内核文件不需要，如果同时存在也不影响更新，系统可以准确识别需要的内核文件）。如果当前目录没有内核文件，将从服务器查询并下载同系列的最新内核进行更新。你也可以查询[可选内核](https://github.com/ophub/kernel/tree/main/pub)版本（rk3588 和其他系列的内核不通用，须区分使用。如 rock5b 可以选择 rk3588 目录下的内核。r66s/r68s 可以选择 stable 目录下的内核），进行指定版本更新：`armbian-update 5.10.150 stable`。在设备支持的可选内核里可以自由更新，如从 5.10.150 内核更新为 5.15.75 内核。
 
 - ### 更多使用说明
 
