@@ -62,8 +62,8 @@ script_repo="https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armb
 # Kernel files download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
 version_branch=("stable" "rk3588")
-stable_kernel=("5.10.125" "5.15.50")
-rk3588_kernel=("5.10.125")
+stable_kernel=("5.10.150" "5.15.75")
+rk3588_kernel=("5.10.150")
 auto_kernel="true"
 # Set supported SoC
 build_armbian=(
@@ -309,6 +309,18 @@ confirm_version() {
         MAINLINE_UBOOT="u-boot.itb"
         KERNEL_BRANCH="rk3588"
         ;;
+    r66s)
+        FDTFILE="rk3568-fastrhino-r66s.dtb"
+        BOOTLOADER_IMG="idbloader.img"
+        MAINLINE_UBOOT="u-boot.itb"
+        KERNEL_BRANCH="stable"
+        ;;
+    r68s)
+        FDTFILE="rk3568-fastrhino-r68s.dtb"
+        BOOTLOADER_IMG="bootloader.bin"
+        MAINLINE_UBOOT=""
+        KERNEL_BRANCH="stable"
+        ;;
     *)
         error_msg "Have no this soc: [ ${soc} ]"
         ;;
@@ -395,8 +407,12 @@ make_image() {
     fi
 
     # Write the specified bootloader
-    dd if="${uboot_path}/${soc}/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync,notrunc bs=512 seek=64 2>/dev/null
-    dd if="${uboot_path}/${soc}/${MAINLINE_UBOOT}" of="${loop_new}" conv=fsync,notrunc bs=512 seek=16384 2>/dev/null
+    if [[ -n "${BOOTLOADER_IMG}" && -n ${MAINLINE_UBOOT} ]]; then
+        dd if="${uboot_path}/${soc}/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync,notrunc bs=512 seek=64 2>/dev/null
+        dd if="${uboot_path}/${soc}/${MAINLINE_UBOOT}" of="${loop_new}" conv=fsync,notrunc bs=512 seek=16384 2>/dev/null
+    elif [[ -n "${BOOTLOADER_IMG}" ]]; then
+        dd if="${uboot_path}/${soc}/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync,notrunc bs=512 skip=64 seek=64 2>/dev/null
+    fi
 }
 
 copy_files() {
