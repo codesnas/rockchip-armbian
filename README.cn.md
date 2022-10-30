@@ -2,7 +2,7 @@
 
 查看英文说明 | [View English description](README.md)
 
-当前支持 Rock5b 设备，使用 [unifreq's](https://github.com/unifreq) 的加强版 `bootloader` 和 最新版本的 [Rock5b 专用内核](https://github.com/unifreq/linux-rock5b) 进行了重制。添加了在 [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) 项目中开发的更多应用和服务，支持写入 `TF/USB/eMMC/NVME` 中使用。
+当前支持 `瑞莎 Rock5b`，`电犀牛 R66S/R68S` 设备，使用 [unifreq's](https://github.com/unifreq) 的加强版 bootloader 和 最新版本的内核进行了重制。添加了在 [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) 项目中开发的更多应用和服务，支持写入 `TF/USB/eMMC/NVME` 中使用。
 
 最新版固件可以在 [Releases](https://github.com/ophub/rockchip-armbian/releases) 中下载。
 
@@ -11,8 +11,6 @@
 使用 [Rufus](https://rufus.ie/) 或者 [balenaEtcher](https://www.balena.io/etcher/) 等工具将固件写入 TF/USB 里，然后把写好固件的 TF/USB 插入设备。
 
 - ### 安装 Armbian
-
-如果你使用 `NVME` 或 `USB` 使用 Armbian 系统，必须下载这里提供的 [spi bootloader](build-armbian/u-boot/rock5b) 文件。[刷写方法](https://wiki.radxa.com/Rock5/install/spi)参照官方的说明。
 
 登录 Armbian 系统 (默认用户: root, 默认密码: 1234) → 上传 Armbian 镜像 → 输入命令：
 
@@ -23,6 +21,8 @@ dd if=armbian.img  of=/dev/<your_device_name>  bs=1M conv=fsync
 # dd if=armbian.img  of=/dev/nvme0n1  bs=1M conv=fsync
 ```
 
+💡提示：`瑞莎 Rock5b` 如果在 `NVME` 或 `USB` 中使用 Armbian 系统，必须下载这里提供的 [spi bootloader](build-armbian/u-boot/rock5b) 文件。[刷写方法](https://wiki.radxa.com/Rock5/install/spi)参照官方的说明。
+
 - ### 更新 Armbian 内核
 
 登录 Armbian 系统 → 输入命令：
@@ -32,7 +32,7 @@ dd if=armbian.img  of=/dev/<your_device_name>  bs=1M conv=fsync
 # If no parameter is specified, it will update to the latest version.
 armbian-update
 ```
-如果当前目录下有成套的内核文件，将使用当前目录的内核进行更新（更新需要的 4 个内核文件是 `header-xxx.tar.gz`, `boot-xxx.tar.gz`, `dtb-rockchip-xxx.tar.gz`, `modules-xxx.tar.gz`。其他内核文件不需要，如果同时存在也不影响更新，系统可以准确识别需要的内核文件）。如果当前目录没有内核文件，将从服务器查询并下载同系列的最新内核进行更新。你也可以查询[可选内核](https://github.com/ophub/kernel/tree/main/pub/rk3588)版本，进行指定版本更新：`armbian-update 5.10.100`。在设备支持的可选内核里可以自由更新，如从 5.10.100 内核更新为 5.15.50 内核。
+如果当前目录下有成套的内核文件，将使用当前目录的内核进行更新（更新需要的 4 个内核文件是 `header-xxx.tar.gz`, `boot-xxx.tar.gz`, `dtb-rockchip-xxx.tar.gz`, `modules-xxx.tar.gz`。其他内核文件不需要，如果同时存在也不影响更新，系统可以准确识别需要的内核文件）。如果当前目录没有内核文件，将从服务器查询并下载同系列的最新内核进行更新。你也可以查询[可选内核](https://github.com/ophub/kernel/tree/main/pub)版本，进行指定版本更新：`armbian-update 5.10.150`。在设备支持的可选内核里可以自由更新，如从 5.10.150 内核更新为 5.15.75 内核。
 
 - ### 更多使用说明
 
@@ -54,17 +54,15 @@ Armbian 固件的本地制作方法，使用 GitHub Actions 云编译的方法�
 
 ## 使用 GitHub Actions 编译内核
 
-内核的编译方法详见 [compile-kernel](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/compile-kernel)
+内核的编译方法详见 [compile-kernel](.github/workflows/compile-kernel.yml)，其中 rk3588 系列详见 [compile-kernel-rk3588](.github/workflows/compile-kernel-rk3588.yml)。这 2 个系列的内核不通用。
 
 ```yaml
 - name: Compile the kernel
   uses: ophub/amlogic-s9xxx-armbian@main
   with:
     build_target: kernel
-    kernel_repo: unifreq/linux-rock5b
-    kernel_version: 5.10.100
+    kernel_version: 5.10.125_5.15.50
     kernel_auto: true
-    kernel_config: compile-kernel/config
     kernel_sign: -yourname
 ```
 
