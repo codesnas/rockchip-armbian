@@ -6,6 +6,16 @@
 
 最新版固件可以在 [Releases](https://github.com/ophub/rockchip-armbian/releases) 中下载。
 
+## Armbian 固件说明
+
+| 芯片  | 设备 | [可选内核](https://github.com/ophub/kernel/tree/main/pub) | Armbian 固件 |
+| ---- | ---- | ---- | ---- |
+| rk3588 | [Radxa-Rock5B](https://wiki.radxa.com/Rock5/5b) | [rk3588](https://github.com/ophub/kernel/tree/main/pub/rk3588) | [Releases](https://github.com/ophub/rockchip-armbian/releases) |
+| rk3568 | [R66S](https://r68s.cn/), [R68S](https://r68s.cn/) | [stable](https://github.com/ophub/kernel/tree/main/pub/stable) | [Releases](https://github.com/ophub/rockchip-armbian/releases) |
+| rk3328 | [beikeyun](https://www.cnblogs.com/milton/p/15391525.html), [l1pro](https://post.smzdm.com/p/a4wkdo7l/) | [stable](https://github.com/ophub/kernel/tree/main/pub/stable) | [Releases](https://github.com/ophub/rockchip-armbian/releases) |
+
+💡提示：在下载列表中查找与设备名称匹配的固件，如 Radxa-Rock5B 的固件是 Armbian_x_rock5b_x.img.gz
+
 ## 安装和更新方法
 
 使用 [Rufus](https://rufus.ie/) 或者 [balenaEtcher](https://www.balena.io/etcher/) 等工具将固件写入 TF/USB 里，然后把写好固件的 TF/USB 插入设备。

@@ -6,6 +6,16 @@ Currently `Radxa 5B`, `FastRhino R66S/R68S`, `beikeyun`, `l1pro` and other devic
 
 The latest version of the Armbian firmware can be downloaded in [Releases](https://github.com/ophub/rockchip-armbian/releases).
 
+## Armbian Firmware instructions
+
+| SoC  | Device | [Optional kernel](https://github.com/ophub/kernel/tree/main/pub) | Armbian Firmware |
+| ---- | ---- | ---- | ---- |
+| rk3588 | [Radxa-Rock5B](https://wiki.radxa.com/Rock5/5b) | [rk3588](https://github.com/ophub/kernel/tree/main/pub/rk3588) | [Releases](https://github.com/ophub/rockchip-armbian/releases) |
+| rk3568 | [R66S](https://r68s.cn/), [R68S](https://r68s.cn/) | [stable](https://github.com/ophub/kernel/tree/main/pub/stable) | [Releases](https://github.com/ophub/rockchip-armbian/releases) |
+| rk3328 | [beikeyun](https://www.cnblogs.com/milton/p/15391525.html), [l1pro](https://post.smzdm.com/p/a4wkdo7l/) | [stable](https://github.com/ophub/kernel/tree/main/pub/stable) | [Releases](https://github.com/ophub/rockchip-armbian/releases) |
+
+💡Tip: Find the firmware matching the device name in the download list. For example, the firmware of Radxa-Rock5B is Armian_x_rock5b_x.img.gz
+
 ## Install and update instructions
 
 Write the IMG file to the USB/TF hard disk through software such as [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher/). Insert the USB/TF hard disk into the device.
