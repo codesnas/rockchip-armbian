@@ -26,6 +26,8 @@ on:
           - rock5b
           - r66s
           - r68s
+          - beikeyun
+          - l1pro
       armbian_kernel:
         description: "Select kernel version."
         required: false

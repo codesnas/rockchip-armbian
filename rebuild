@@ -69,6 +69,7 @@ auto_kernel="true"
 build_armbian=(
     "rock5b"
     "r66s" "r68s"
+    "beikeyun" "l1pro"
 )
 # Set Armbian firmware size (Unit: MiB, SKIP_MB >= 4, BOOT_MB >= 256, ROOT_MB >= 2048)
 SKIP_MB="16"
@@ -319,6 +320,18 @@ confirm_version() {
     r68s)
         FDTFILE="rk3568-fastrhino-r68s.dtb"
         BOOTLOADER_IMG="bootloader.bin"
+        MAINLINE_UBOOT=""
+        KERNEL_BRANCH="stable"
+        ;;
+    beikeyun)
+        FDTFILE="rk3328-beikeyun-1296mhz.dtb"
+        BOOTLOADER_IMG="btld-rk3328.bin"
+        MAINLINE_UBOOT=""
+        KERNEL_BRANCH="stable"
+        ;;
+    l1pro)
+        FDTFILE="rk3328-l1pro-1296mhz.dtb"
+        BOOTLOADER_IMG="btld-rk3328.bin"
         MAINLINE_UBOOT=""
         KERNEL_BRANCH="stable"
         ;;
