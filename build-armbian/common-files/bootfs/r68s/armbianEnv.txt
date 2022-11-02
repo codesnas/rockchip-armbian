@@ -3,6 +3,7 @@ bootlogo=true
 fdtfile=rockchip/rk3568-fastrhino-r68s.dtb
 rootdev=/dev/mmcblk0p2
 rootfstype=ext4
+rootflags=rw,errors=remount-ro
 console=serial
 consoleargs=console=ttyS2,1500000
 usbstoragequirks=0x2537:0x1066:u,0x2537:0x1068:u
