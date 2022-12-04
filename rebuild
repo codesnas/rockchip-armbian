@@ -45,13 +45,14 @@ build_path="${make_path}/build-armbian"
 kernel_path="${build_path}/rockchip-kernel"
 uboot_path="${build_path}/u-boot"
 firmware_path="${build_path}/firmware"
-configfiles_path="${build_path}/common-files"
-rockchip_model_conf="${configfiles_path}/rootfs/etc/rockchip_model_database.conf"
+common_files="${build_path}/common-files"
+rockchip_model_conf="${common_files}/rootfs/etc/rockchip_model_database.conf"
 tmp_dir="${make_path}/tmp_dir"
 tmp_outpath="${tmp_dir}/tmp_out"
 tmp_armbian="${tmp_dir}/tmp_armbian"
 tmp_build="${tmp_dir}/tmp_build"
 tmp_aml_image="${tmp_dir}/tmp_aml_image"
+
 arch_info="$(arch)"
 host_release="$(cat /etc/os-release | grep '^VERSION_CODENAME=.*' | cut -d'=' -f2)"
 # Get armbian ${VERSION_CODENAME}: such as [ jammy ]
@@ -60,8 +61,10 @@ os_release_file="etc/os-release"
 armbian_release_file="etc/armbian-release"
 # Add custom armbian firmware information
 ophub_release_file="etc/ophub-release"
+
 # Dependency files download repository
 depends_repo="https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian"
+
 # Kernel files download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
 # Convert kernel library address to svn format
@@ -70,12 +73,14 @@ version_branch=("stable" "rk3588")
 stable_kernel=("6.0.5")
 rk3588_kernel=("5.10.150")
 auto_kernel="true"
+
 # Set supported board
 build_armbian=(
     "rock5b"
     "r66s" "r68s"
     "beikeyun" "l1pro"
 )
+
 # Set Armbian firmware size (Unit: MiB, SKIP_MB >= 4, BOOT_MB >= 256, ROOT_MB >= 2048)
 SKIP_MB="16"
 BOOT_MB="256"
@@ -84,7 +89,7 @@ ROOT_MB="2560"
 ROOTFS_TYPE="ext4"
 # Custom name in firmware name: ${build_image_file}, such as _server, _dev, etc.
 custom_name="_server"
-#
+
 # Set font color
 STEPS="[\033[95m STEPS \033[0m]"
 INFO="[\033[94m INFO \033[0m]"
@@ -213,20 +218,16 @@ download_depends() {
 
     # Download generic firmware
     mkdir -p ${firmware_path}
-    svn export ${depends_repo}/amlogic-armbian/firmware.tar.xz ${firmware_path} --force
+    svn export ${depends_repo}/firmware/firmware.tar.xz ${firmware_path} --force
 
     # Download software service related files
-    mkdir -p ${configfiles_path}/rootfs/usr/share/ophub
-    svn export ${depends_repo}/common-files/rootfs/usr/share/ophub ${configfiles_path}/rootfs/usr/share/ophub --force
-    find ${configfiles_path}/rootfs/usr/share/ophub -type f -name '*.sh' -exec chmod +x {} \;
+    mkdir -p ${common_files}/rootfs/usr/share/ophub
+    svn export ${depends_repo}/armbian-files/common-files/usr/share/ophub ${common_files}/rootfs/usr/share/ophub --force
+    find ${common_files}/rootfs/usr/share/ophub -type f -name '*.sh' -exec chmod +x {} \;
 
     # Download main service related files
-    tmp_depends_dir="$(mktemp -d)"
-    svn export ${depends_repo}/common-files/rootfs/usr/sbin ${tmp_depends_dir} --force
-    cp -f ${tmp_depends_dir}/{armbian-ddbr,armbian-docker,armbian-fix,armbian-software,armbian-swap,armbian-tf,balethirq.pl} \
-        ${configfiles_path}/rootfs/usr/sbin
-    chmod +x ${configfiles_path}/rootfs/usr/sbin/*
-    rm -rf ${tmp_depends_dir} 2>/dev/null
+    mkdir -p ${common_files}/rootfs/usr/sbin
+    svn export ${depends_repo}/armbian-files/common-files/usr/sbin ${common_files}/rootfs/usr/sbin --force
 }
 
 query_version() {
@@ -451,8 +452,8 @@ refactor_files() {
     tar -xJf "${firmware_path}/firmware.tar.xz" --no-same-owner -C ${tag_rootfs}/usr
 
     # Copy the same files
-    [[ "$(ls ${configfiles_path}/bootfs/${board} 2>/dev/null | wc -w)" -ne "0" ]] && cp -rf ${configfiles_path}/bootfs/${board}/* ${tag_bootfs}
-    [[ "$(ls ${configfiles_path}/rootfs 2>/dev/null | wc -w)" -ne "0" ]] && cp -rf ${configfiles_path}/rootfs/* ${tag_rootfs}
+    [[ "$(ls ${common_files}/bootfs/${board} 2>/dev/null | wc -w)" -ne "0" ]] && cp -rf ${common_files}/bootfs/${board}/* ${tag_bootfs}
+    [[ "$(ls ${common_files}/rootfs 2>/dev/null | wc -w)" -ne "0" ]] && cp -rf ${common_files}/rootfs/* ${tag_rootfs}
 
     # Copy the bootloader files
     [[ -d "${tag_rootfs}/usr/lib/u-boot" ]] || mkdir -p ${tag_rootfs}/usr/lib/u-boot
