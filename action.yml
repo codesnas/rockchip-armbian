@@ -64,7 +64,7 @@ runs:
 
         cd ${GITHUB_ACTION_PATH}
             echo -e "Start to rebuild armbian..."
-            make_command=" -d"
+            make_command=""
             [[ -n "${{ inputs.armbian_board }}" ]] && make_command="${make_command} -b ${{ inputs.armbian_board }}"
             [[ -n "${{ inputs.armbian_kernel }}" ]] && make_command="${make_command} -k ${{ inputs.armbian_kernel }}"
             [[ -n "${{ inputs.auto_kernel }}" ]] && make_command="${make_command} -a ${{ inputs.auto_kernel }}"
