@@ -125,7 +125,7 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
 
       - name: Rebuild Armbian for rockchip
-        uses: ophub/rockchip-armbian@main
+        uses: codesnas/rockchip-armbian@main
         if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
         with:
           armbian_path: build/output/images/*.img.gz
