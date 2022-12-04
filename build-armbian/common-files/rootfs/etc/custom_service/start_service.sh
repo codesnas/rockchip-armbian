@@ -16,7 +16,7 @@
 
 # Start ssh service
 [[ -d "/var/run/sshd" ]] || mkdir -p -m0755 /var/run/sshd
-[[ -f "/etc/init.d/ssh" ]] && /etc/init.d/ssh start 2>/dev/null
+[[ -f "/etc/init.d/ssh" ]] && sleep 5 && /etc/init.d/ssh restart 2>/dev/null
 
 # Add custom log
 echo "[$(date +"%Y.%m.%d.%H%M")] Hello World..." >/tmp/ophub_start_service.log
