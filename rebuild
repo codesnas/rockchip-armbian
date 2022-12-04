@@ -562,8 +562,15 @@ refactor_files() {
         sed -i "s|IMAGE_TYPE=.*|IMAGE_TYPE=stable|g" ${armbian_release_file} 2>/dev/null
     }
 
+    # Clear quotes content for [ /etc/update-motd.d/35-armbian-tips ]
+    quotes_file="etc/update-motd.d/quotes.txt"
+    [[ -f "${quotes_file}" ]] && echo "" >${quotes_file}
+
     # Make the .bashrc take effect, Default shell settings file: /etc/default/useradd
     echo '[[ "${SHELL}" == *bash && -f "${HOME}/.bashrc" ]] && . ${HOME}/.bashrc' >>etc/profile
+
+    # Explicitly disable resizing for [ /usr/lib/armbian/armbian-resize-filesystem ], use armbian-tf settings
+    echo "no" >root/.no_rootfs_resize
 
     # Reduce network latency [ A start job is running for raise network interfaces (5 mins 1 sec) ]
     network_service="usr/lib/systemd/system/networking.service"
@@ -652,6 +659,15 @@ loop_rebuild() {
         i="1"
         for k in ${build_kernel[*]}; do
             {
+                kernel="${k}"
+
+                # Rockchip rk3568 series, such as FastRhino R66S/R68S only support 6.0.y and above kernel
+                [[ "${SOC,,}" == "rk3568" && "${kernel:0:1}" -ne "6" ]] && {
+                    echo -e "(${j}.${i}) ${WARNING} ${board}(${SOC,,}) cannot use ${kernel} kernel, skip."
+                    let i++
+                    continue
+                }
+                
                 echo -n "(${j}.${i}) Start building Armbian [ ${b} - ${k}(${KERNEL_BRANCH}) ]. "
                 now_remaining_space="$(df -Tk ${make_path} | grep '/dev/' | awk '{print $5}' | echo $(($(xargs) / 1024 / 1024)))"
                 if [[ "${now_remaining_space}" -le "6" ]]; then
@@ -660,9 +676,6 @@ loop_rebuild() {
                 else
                     echo "Remaining space is ${now_remaining_space}G."
                 fi
-
-                # The loop variable assignment
-                kernel="${k}"
 
                 # Execute the following functions in sequence
                 extract_armbian
