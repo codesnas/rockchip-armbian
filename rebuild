@@ -12,7 +12,7 @@
 # Copyright (C) 2021- https://github.com/unifreq
 # Copyright (C) 2021- https://github.com/ophub/rockchip-armbian
 #
-# Command: sudo ./rebuild -d
+# Command: sudo ./rebuild
 # Command optional parameters please refer to the source code repository
 #
 #==================================== Functions list ====================================
@@ -116,14 +116,6 @@ init_var() {
 
     while [[ -n "${1}" ]]; do
         case "${1}" in
-        -d | --Default)
-            : ${build_armbian:="${build_armbian}"}
-            : ${stable_kernel:="${stable_kernel}"}
-            : ${auto_kernel:="${auto_kernel}"}
-            : ${ROOT_MB:="${ROOT_MB}"}
-            : ${ROOTFS_TYPE:="${ROOTFS_TYPE}"}
-            : ${custom_name:="${custom_name}"}
-            ;;
         -b | --Board)
             if [[ -n "${2}" ]]; then
                 if [[ "${2}" != "all" ]]; then
