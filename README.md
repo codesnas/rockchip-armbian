@@ -95,5 +95,5 @@ See [compile-kernel](.github/workflows/compile-kernel.yml) for the kernel compil
 
 ## License
 
-The rockchip-armbian © OPHUB is licensed under [GPL-2.0](https://github.com/ophub/rockchip-armbian/blob/main/LICENSE)
+The rockchip-armbian © OPHUB is licensed under [GPL-2.0](LICENSE)
 

@@ -94,5 +94,5 @@ Armbian 固件的本地制作方法，使用 GitHub Actions 云编译的方法�
 
 ## License
 
-The rockchip-armbian © OPHUB is licensed under [GPL-2.0](https://github.com/ophub/rockchip-armbian/blob/main/LICENSE)
+The rockchip-armbian © OPHUB is licensed under [GPL-2.0](LICENSE)
 
