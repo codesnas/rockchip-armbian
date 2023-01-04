@@ -13,17 +13,17 @@ on:
       kernel_repo:
         description: "Select the kernel repository"
         required: false
-        default: "unifreq/linux-rock5b"
+        default: "unifreq/linux-5.10.y-rk35xx"
         type: choice
         options:
-          - unifreq/linux-rock5b
+          - unifreq/linux-5.10.y-rk35xx
       kernel_version:
         description: "Select kernel version"
         required: false
-        default: "5.10.150"
+        default: "5.10.110"
         type: choice
         options:
-          - 5.10.150
+          - 5.10.110
       kernel_auto:
         description: "Auto use the latest kernel"
         required: false
