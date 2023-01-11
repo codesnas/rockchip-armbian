@@ -1,5 +1,5 @@
 #==========================================================================
-# https://github.com/codesnas/rockchip-armbian
+# https://github.com/ophub/rockchip-armbian
 # Description: Delete older releases and workflows runs
 #==========================================================================
 
@@ -13,6 +13,11 @@ on:
         description: "Delete related Tags?"
         required: false
         default: true
+        type: boolean
+      out_log:
+        description: "Output a list log for each step?"
+        required: false
+        default: false
         type: boolean
       releases_keep_latest:
         description: "How many latest releases to keep."
@@ -36,7 +41,7 @@ on:
       releases_keep_keyword:
         description: "Keyword of the keep releases."
         required: false
-        default: "-"
+        default: ""
       workflows_keep_day:
         description: "Days to keep workflows."
         required: false
@@ -85,6 +90,7 @@ jobs:
         uses: ophub/delete-releases-workflows@main
         with:
           delete_tags: ${{ inputs.delete_tags }}
+          out_log: ${{ inputs.out_log }}
           releases_keep_latest: ${{ inputs.releases_keep_latest }}
           releases_keep_keyword: ${{ inputs.releases_keep_keyword }}
           workflows_keep_day: ${{ inputs.workflows_keep_day }}
